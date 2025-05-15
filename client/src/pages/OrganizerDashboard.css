@@ -5,10 +5,12 @@ body {
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   background-color: #f7f9fc;
   color: #333;
+  margin: 0;
+  padding: 0;
 }
 
 /* Dashboard Layout */
-.dashboard-wrapper {
+.dashboard-container {
   display: flex;
   width: 100%;
   min-height: 100vh;
@@ -17,18 +19,24 @@ body {
 .dashboard-sidebar {
   background-color: #f9b0b6;
   width: 240px;
-  padding: 24px;
+  padding: 24px 16px;
   display: flex;
   flex-direction: column;
   color: white;
   position: fixed;
   height: 100vh;
+  left: 0;
+  top: 0;
+  overflow-y: auto;
+  z-index: 100;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
 }
 
 .dashboard-main {
   flex: 1;
   margin-left: 240px;
   width: calc(100% - 240px);
+  min-height: 100vh;
 }
 
 .dashboard-content {
@@ -39,20 +47,65 @@ body {
 .logo {
   font-size: 24px;
   font-weight: 700;
-  margin-bottom: 40px;
+  margin-bottom: 32px;
   letter-spacing: -0.5px;
+  text-align: center;
 }
 
 /* Sidebar Navigation */
-.filters {
+.sidebar-nav {
+  margin-bottom: 32px;
+}
+
+.nav-item {
+  display: block;
+  width: 100%;
+  padding: 12px 16px;
+  margin-bottom: 8px;
+  border: none;
+  border-radius: 8px;
+  text-align: left;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background-color: transparent;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.nav-item:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.nav-item.active {
+  background-color: rgba(255, 255, 255, 0.25);
+  color: white;
+  font-weight: 600;
+}
+
+/* Filter Section */
+.filter-section {
   margin-bottom: 24px;
+}
+
+.filter-title {
+  font-size: 14px;
+  margin-bottom: 12px;
+  padding-left: 16px;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 500;
+}
+
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
 .filter-btn {
   display: block;
   width: 100%;
-  padding: 12px 16px;
-  margin-bottom: 8px;
+  padding: 10px 16px;
   border: none;
   border-radius: 8px;
   text-align: left;
@@ -78,8 +131,9 @@ body {
   margin-top: auto;
   display: flex;
   align-items: center;
-  padding: 16px 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+  margin-top: 24px;
 }
 
 .user-avatar {
@@ -104,6 +158,14 @@ body {
   opacity: 0.8;
 }
 
+/* Page Title */
+.page-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  color: #333;
+}
+
 /* Dashboard Overview */
 .dashboard-overview {
   width: 100%;
@@ -120,7 +182,7 @@ body {
 }
 
 .calendar-container {
-  width: 420px;
+  width: 380px;
   background-color: white;
   border-radius: 12px;
   padding: 20px;
@@ -138,13 +200,14 @@ body {
 .month-navigation {
   display: flex;
   align-items: center;
+  width: 100%;
+  justify-content: space-between;
 }
 
 .current-month {
   font-size: 16px;
-  margin: 0 16px;
-  width: 140px;
-  text-align: center;
+  margin: 0;
+  font-weight: 600;
 }
 
 .prev-month,
@@ -214,6 +277,7 @@ body {
   border-radius: 12px;
   padding: 24px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-top: 24px;
 }
 
 .section-header {
@@ -226,6 +290,7 @@ body {
 .section-header h2 {
   font-size: 18px;
   font-weight: 600;
+  margin: 0;
 }
 
 .view-all-btn {
@@ -251,6 +316,7 @@ body {
 .page-header h1 {
   font-size: 24px;
   font-weight: 600;
+  margin: 0;
 }
 
 .create-event-btn {
@@ -278,6 +344,7 @@ body {
 }
 
 .form-container h2 {
+  margin-top: 0;
   margin-bottom: 20px;
   font-size: 18px;
 }
@@ -389,13 +456,50 @@ body {
     text-align: center;
   }
 
+  .nav-item,
   .filter-btn {
-    padding: 8px;
+    padding: 10px;
     text-align: center;
+    font-size: 0;
   }
 
-  .filter-btn span {
-    display: none;
+  .nav-item::before,
+  .filter-btn::before {
+    font-size: 16px;
+  }
+
+  .nav-item:nth-child(1)::before {
+    content: "📊";
+  }
+
+  .nav-item:nth-child(2)::before {
+    content: "🗓️";
+  }
+
+  .nav-item:nth-child(3)::before {
+    content: "📈";
+  }
+
+  .filter-btn:nth-child(1)::before {
+    content: "🔄";
+  }
+
+  .filter-btn:nth-child(2)::before {
+    content: "⏩";
+  }
+
+  .filter-btn:nth-child(3)::before {
+    content: "⏪";
+  }
+
+  .filter-title {
+    font-size: 0;
+    margin: 8px 0;
+  }
+
+  .filter-title::before {
+    content: "🔍";
+    font-size: 16px;
   }
 
   .user-info {

@@ -49,6 +49,8 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   border: 1px solid #f1f5f9;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  overflow: hidden;
 }
 
 .analytics-card:hover {
@@ -104,20 +106,20 @@
 
 /* Add Event Card */
 .add-event-card {
-  background-color: #ff6b6b;
+  background: linear-gradient(135deg, #ff6b6b 0%, #ff4757 100%);
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background-color 0.2s, transform 0.2s ease;
+  transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
 }
 
 .add-event-card:hover {
-  background-color: #ff4757;
-  transform: translateY(-4px);
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 12px 20px rgba(255, 71, 87, 0.2);
 }
 
 .add-event-card::after {
@@ -150,172 +152,111 @@
 }
 
 .add-icon {
-  font-size: 24px;
+  font-size: 28px;
   margin-bottom: 8px;
+  font-weight: 300;
 }
 
-/* Upcoming Events Widget (replacing the problematic chart) */
-.upcoming-events-widget {
-  background-color: white;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  border: 1px solid #f1f5f9;
-  margin-top: 24px;
-}
-
-.widget-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid #f1f5f9;
-}
-
-.widget-header h3 {
-  font-size: 16px;
-  font-weight: 600;
-  color: #333;
-  margin: 0;
-}
-
-.widget-header .view-all {
-  color: #ff4757;
-  font-size: 14px;
-  font-weight: 500;
-  text-decoration: none;
-}
-
-.event-item {
-  display: flex;
-  padding: 12px 0;
-  border-bottom: 1px solid #f1f5f9;
-}
-
-.event-item:last-child {
-  border-bottom: none;
-}
-
-.event-date {
+/* Analytics Loading & Error States */
+.analytics-loading-container,
+.analytics-error-container,
+.analytics-empty-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 50px;
-  height: 50px;
-  background-color: #f8fafc;
-  border-radius: 8px;
-  margin-right: 16px;
-}
-
-.event-day {
-  font-size: 18px;
-  font-weight: 700;
-  color: #ff4757;
-}
-
-.event-month {
-  font-size: 12px;
-  color: #64748b;
-  text-transform: uppercase;
-}
-
-.event-info {
-  flex: 1;
-}
-
-.event-name {
-  font-size: 14px;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 4px;
-}
-
-.event-meta {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 12px;
-  color: #64748b;
-}
-
-.meta-item {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.event-status-tag {
-  display: inline-block;
-  padding: 4px 8px;
-  border-radius: 4px;
-  font-size: 12px;
-  font-weight: 500;
-  margin-left: auto;
-}
-
-.status-upcoming {
-  background-color: #ecfdf5;
-  color: #10b981;
-}
-
-.status-ongoing {
-  background-color: #eff6ff;
-  color: #3b82f6;
-}
-
-/* Activity Feed (additional replacement for chart) */
-.activity-feed {
-  background-color: white;
+  padding: 48px 24px;
+  text-align: center;
   border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  border: 1px solid #f1f5f9;
-  margin-top: 24px;
+  background-color: white;
+  min-height: 300px;
 }
 
-.activity-item {
-  display: flex;
-  padding: 12px 0;
+.loading-spinner {
+  border: 3px solid rgba(108, 93, 211, 0.1);
+  border-left-color: #6c5dd3;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.analytics-error-container p {
+  color: #ef4444;
+  margin-bottom: 16px;
+}
+
+.retry-button {
+  background-color: #6c5dd3;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.empty-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  color: #94a3b8;
+}
+
+.analytics-empty-container h3 {
+  color: #334155;
+  margin: 0 0 8px 0;
+}
+
+.analytics-empty-container p {
+  color: #64748b;
+}
+
+/* Section Headers */
+.section-header {
+  margin: 32px 0 24px;
+  padding-bottom: 12px;
   border-bottom: 1px solid #f1f5f9;
 }
 
-.activity-item:last-child {
-  border-bottom: none;
-}
-
-.activity-avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background-color: #f1f5f9;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 12px;
+.section-header h3 {
+  font-size: 14px;
   font-weight: 600;
   color: #64748b;
+  margin: 0;
+  letter-spacing: 0.5px;
 }
 
-.activity-content {
-  flex: 1;
+/* Charts Styling */
+.analytics-charts-grid {
+  margin-bottom: 32px;
 }
 
-.activity-text {
+.analytics-chart-container {
+  background-color: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid #f1f5f9;
+}
+
+.analytics-chart-container h4 {
   font-size: 14px;
-  line-height: 1.4;
-  margin-bottom: 4px;
-}
-
-.activity-text strong {
   font-weight: 600;
-  color: #333;
+  color: #64748b;
+  margin: 0 0 20px 0;
+  letter-spacing: 0.5px;
 }
 
-.activity-time {
-  font-size: 12px;
-  color: #94a3b8;
+.chart-wrapper {
+  height: 300px;
+  position: relative;
 }
 
 /* Analytics Bottom Row */
@@ -323,7 +264,7 @@
   display: grid;
   grid-template-columns: 280px 1fr;
   gap: 20px;
-  margin-top: 24px;
+  margin-bottom: 32px;
 }
 
 /* Tickets Sold Section */
@@ -331,7 +272,7 @@
 .ticket-sales-container {
   background-color: white;
   border-radius: 12px;
-  padding: 20px;
+  padding: 24px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   border: 1px solid #f1f5f9;
 }
@@ -341,7 +282,7 @@
   font-size: 14px;
   font-weight: 600;
   color: #64748b;
-  margin-bottom: 16px;
+  margin: 0 0 24px 0;
   letter-spacing: 0.5px;
 }
 
@@ -353,132 +294,11 @@
   padding: 16px 0;
 }
 
-.circle-progress {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  background: conic-gradient(#ff4757 0% 62%, #10b981 62% 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  margin-bottom: 24px;
-}
-
-.circle-progress::before {
-  content: "";
-  position: absolute;
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
-  background-color: white;
-}
-
-.progress-value {
-  position: relative;
-  z-index: 1;
-  font-size: 28px;
-  font-weight: 700;
-  color: #333;
-}
-
-.percent {
-  font-size: 16px;
-  font-weight: 600;
-}
-
-.progress-legend {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-}
-
-.legend-item {
-  display: flex;
-  align-items: center;
-  font-size: 14px;
-}
-
-.dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  margin-right: 8px;
-}
-
-.dot.online {
-  background-color: #ff4757;
-}
-
-.dot.offline {
-  background-color: #10b981;
-}
-
-/* Ticket Sales Chart */
-.ticket-sales-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 16px;
-}
-
-.sales-amount {
-  text-align: right;
-}
-
-.amount {
-  font-size: 20px;
-  font-weight: 700;
-  color: #333;
-  margin-bottom: 4px;
-}
-
-.date {
-  font-size: 12px;
-  color: #64748b;
-}
-
-.sales-chart {
-  height: 200px;
-}
-
-/* Loading State */
-.analytics-loading-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 48px 0;
-}
-
-.analytics-error-container {
-  padding: 24px;
-  text-align: center;
-  color: #64748b;
-}
-
-/* Media Queries */
-@media (max-width: 1024px) {
-  .analytics-overview-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .analytics-bottom-row {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 768px) {
-  .analytics-overview-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
 .doughnut-wrapper {
   position: relative;
-  width: 150px;
-  height: 150px;
-  margin: 0 auto;
+  width: 180px;
+  height: 180px;
+  margin: 0 auto 24px;
 }
 
 .doughnut-wrapper canvas {
@@ -492,7 +312,111 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 1.2rem;
-  font-weight: 600;
+  font-size: 24px;
+  font-weight: 700;
   color: #333;
+}
+
+.progress-legend {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #64748b;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.dot.online {
+  background-color: #6c5dd3;
+}
+
+.dot.offline {
+  background-color: #ff7a00;
+}
+
+/* Ticket Sales Chart */
+.ticket-sales-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.sales-amount {
+  text-align: right;
+}
+
+.amount {
+  font-size: 22px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.date {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.sales-chart {
+  height: 240px;
+  width: 100%;
+}
+
+/* Compact Chart */
+.compact-chart {
+  margin-top: 16px;
+  padding: 16px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid #f1f5f9;
+  height: 260px;
+}
+
+/* Media Queries */
+@media (max-width: 1200px) {
+  .analytics-overview-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .analytics-bottom-row {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .analytics-overview-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .analytics-content {
+    padding: 16px;
+  }
+
+  .analytics-chart-container,
+  .tickets-sold-container,
+  .ticket-sales-container {
+    padding: 16px;
+  }
+
+  .doughnut-wrapper {
+    width: 160px;
+    height: 160px;
+  }
 }

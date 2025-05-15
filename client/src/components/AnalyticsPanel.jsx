@@ -1,6 +1,5 @@
-import { useEffect, useState, useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
-import { Bar, Line } from "react-chartjs-2";
+import { useState } from "react";
+import { Bar, Line, Doughnut } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -8,6 +7,7 @@ import {
   BarElement,
   LineElement,
   PointElement,
+  ArcElement,
   Title,
   Tooltip,
   Legend,
@@ -19,67 +19,40 @@ ChartJS.register(
   BarElement,
   LineElement,
   PointElement,
+  ArcElement,
   Title,
   Tooltip,
   Legend
 );
 
-import { Doughnut } from "react-chartjs-2";
-import { ArcElement } from "chart.js";
+// Maximum Width Analytics Panel
+export default function ImprovedAnalyticsPanel({ fullView = false }) {
+  // Demo data for the component
+  const [analytics, setAnalytics] = useState({
+    analytics: [
+      { title: "Music Festival", attendees: 450 },
+      { title: "Tech Conference", attendees: 320 },
+      { title: "Food Fair", attendees: 280 },
+      { title: "Art Exhibition", attendees: 175 },
+    ],
+    onlineSales: 1250,
+    offlineSales: 820,
+    weeklySales: [45, 65, 75, 30, 98, 52, 40],
+    weeklyTotalSales: 5840,
+    lastUpdated: "May 15, 2025",
+    ticketProgress: 68,
+  });
 
-ChartJS.register(ArcElement);
+  const totalAttendees = analytics.analytics.reduce(
+    (sum, event) => sum + (event.attendees || 0),
+    0
+  );
 
-export default function AnalyticsPanel({ fullView = false }) {
-  const { token } = useContext(AuthContext);
-  const [analytics, setAnalytics] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const onlineSales = analytics.onlineSales || 0;
+  const offlineSales = analytics.offlineSales || 0;
+  const totalSales = onlineSales + offlineSales;
 
-  useEffect(() => {
-    const fetchAnalytics = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const res = await fetch(
-          "http://localhost:5000/api/analytics/organizer",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (!res.ok) throw new Error("Failed to fetch analytics");
-
-        const data = await res.json();
-        setAnalytics(data);
-        console.log("Fetched Analytics:", data);
-      } catch (error) {
-        console.error("Analytics fetch error:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    if (token) fetchAnalytics();
-  }, [token]);
-
-  if (isLoading) {
-    return (
-      <div className="analytics-loading-container">
-        <div className="loading-spinner"></div>
-        <p>Loading analytics data...</p>
-      </div>
-    );
-  }
-
-  if (!analytics) {
-    return (
-      <div className="analytics-error-container">
-        <p>Unable to load analytics data. Please try again later.</p>
-      </div>
-    );
-  }
-
-  // Bar chart: views, likes, shares per event
+  // Charts data
   const attendanceData = {
     labels: analytics.analytics.map((e) => e.title),
     datasets: [
@@ -90,6 +63,7 @@ export default function AnalyticsPanel({ fullView = false }) {
         borderColor: "#6C5DD3",
         borderWidth: 1,
         barPercentage: 0.6,
+        borderRadius: 6, // this adds rounded corners
       },
     ],
   };
@@ -99,7 +73,10 @@ export default function AnalyticsPanel({ fullView = false }) {
     datasets: [
       {
         label: "Ticket Sales",
-        data: analytics.weeklySales || [],
+        data:
+          analytics.weeklySales.length === 7
+            ? analytics.weeklySales
+            : Array(7).fill(0),
         borderColor: "#6C5DD3",
         backgroundColor: "rgba(108, 93, 211, 0.1)",
         tension: 0.4,
@@ -107,14 +84,11 @@ export default function AnalyticsPanel({ fullView = false }) {
         pointBackgroundColor: "#6C5DD3",
         pointBorderColor: "#fff",
         pointBorderWidth: 2,
-        pointRadius: 0,
+        pointRadius: 4,
         pointHoverRadius: 6,
       },
     ],
   };
-
-  const onlineSales = analytics.onlineSales || 0;
-  const offlineSales = analytics.offlineSales || 0;
 
   const ticketProgressData = {
     labels: ["Online", "Offline"],
@@ -127,160 +101,180 @@ export default function AnalyticsPanel({ fullView = false }) {
     ],
   };
 
+  const barOptions = {
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+      legend: { display: false },
+    },
+    scales: {
+      x: { grid: { display: false } },
+      y: {
+        beginAtZero: true,
+        grid: { borderDash: [5, 5] },
+        ticks: { stepSize: 100 },
+      },
+    },
+  };
+
+  const lineOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { display: false } },
+      y: { beginAtZero: true, grid: { borderDash: [5, 5] } },
+    },
+    elements: { line: { borderWidth: 2 } },
+  };
+
   const ticketProgressOptions = {
     cutout: "70%",
     plugins: {
-      legend: {
-        position: "bottom",
-        labels: {
-          boxWidth: 12,
-          usePointStyle: true,
-          pointStyle: "circle",
-        },
-      },
+      legend: { display: false },
       tooltip: {
         callbacks: {
           label: (context) =>
-            `${context.label}: ${context.raw} (${(
-              (context.raw / (onlineSales + offlineSales || 1)) *
-              100
-            ).toFixed(1)}%)`,
+            `${context.label}: ${context.raw} (${
+              totalSales ? ((context.raw / totalSales) * 100).toFixed(1) : 0
+            }%)`,
         },
       },
     },
   };
 
-  const totalAttendees = analytics.analytics.reduce(
-    (sum, event) => sum + (event.attendees || 0),
-    0
+  // Key Metrics component with wider layout
+  const KeyMetrics = () => (
+    <div className="bg-gray-50 rounded-xl p-8 shadow-md border border-gray-100">
+      <h3 className="text-xl font-medium text-gray-700 mb-6">Key Metrics</h3>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="p-6 bg-gray-50 rounded-lg">
+          <div className="text-base text-gray-600 mb-2">Total Events</div>
+          <div className="text-4xl font-bold text-gray-800">
+            {analytics.analytics.length}
+          </div>
+        </div>
+        <div className="p-6 bg-gray-50 rounded-lg">
+          <div className="text-base text-gray-600 mb-2">Total Attendees</div>
+          <div className="text-4xl font-bold text-gray-800">
+            {totalAttendees.toLocaleString()}
+          </div>
+        </div>
+        <div className="p-6 bg-gray-50 rounded-lg">
+          <div className="text-base text-gray-600 mb-2">Total Revenue</div>
+          <div className="text-4xl font-bold text-gray-800">
+            ${(totalSales * 25).toLocaleString()}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 
-  return (
-    <div className={`analytics-panel ${fullView ? "full-view" : ""}`}>
-      {!fullView && (
-        <div className="analytics-header">
-          <h2>Events Overview</h2>
-        </div>
-      )}
-
-      <div className={`analytics-content ${!fullView ? "compact" : ""}`}>
-        <div className="analytics-overview-grid">
-          <div className="analytics-card"></div>
-
-          <div className="analytics-card"></div>
-
-          <div className="analytics-card"></div>
-
-          <div className="analytics-card add-event-card"></div>
-        </div>
-
-        {fullView && (
-          <>
-            <div className="section-header">
-              <h3>STATISTICS</h3>
-            </div>
-            <div className="analytics-charts-grid">
-              <div className="analytics-chart-container">
-                <div className="chart-wrapper">
-                  <Bar data={attendanceData} options={barOptions} />
-                </div>
-              </div>
-            </div>
-
-            <div className="analytics-bottom-row">
-              <div className="tickets-sold-container">
-                <h3>TICKETS SOLD</h3>
-                <div className="circle-progress-container">
-                  <div
-                    className="circle-progress doughnut-wrapper"
-                    data-label={`${analytics.ticketProgress || 0}%`}
-                  >
-                    <Doughnut
-                      data={ticketProgressData}
-                      options={ticketProgressOptions}
-                    />
-                  </div>
-
-                  <div className="progress-legend">
-                    <div className="legend-item">
-                      <span className="dot online"></span>
-                      <span>Online</span>
-                    </div>
-                    <div className="legend-item">
-                      <span className="dot offline"></span>
-                      <span>Offline</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="ticket-sales-container">
-                <div className="ticket-sales-header">
-                  <h3>TICKET SALES OVER THE WEEK</h3>
-                  <div className="sales-amount">
-                    <div className="amount">
-                      ${analytics.weeklyTotalSales?.toLocaleString() || "N/A"}
-                    </div>
-                    <div className="date">{analytics.lastUpdated || "—"}</div>
-                  </div>
-                </div>
-                <div className="chart-wrapper sales-chart">
-                  <Line data={ticketSalesData} options={lineOptions} />
-                </div>
-              </div>
-            </div>
-          </>
-        )}
-
-        {!fullView && (
-          <div className="compact-chart">
-            <Bar data={attendanceData} options={barOptions} />
+  // For dashboard view, show only one chart with increased width
+  if (!fullView) {
+    return (
+      <div
+        className="bg-white rounded-xl shadow-lg w-full mx-auto"
+        style={{ maxWidth: "100vw" }}
+      >
+        <div className="p-6">
+          <h3 className="text-lg font-medium text-gray-700 mb-4">
+            Weekly Sales
+          </h3>
+          <div className="h-72 mb-4">
+            <Line data={ticketSalesData} options={lineOptions} />
           </div>
-        )}
+          <div className="text-xs text-gray-500 mt-2 text-right">
+            Last updated: {analytics.lastUpdated || "N/A"}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // For full analytics page view, show all charts in a grid with maximum width
+  return (
+    <div
+      className="bg-white rounded-xl shadow-lg w-full"
+      style={{ maxWidth: "100vw" }}
+    >
+      <div className="p-8">
+        {/* Key Metrics */}
+        <KeyMetrics />
+
+        {/* Charts Grid Layout - Extra wide version */}
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 mt-8">
+          {/* Chart 1 */}
+          <div className="bg-white rounded-xl p-6 shadow-md border border-gray-100">
+            <h3 className="text-lg font-medium text-gray-700 mb-4">
+              Event Attendance
+            </h3>
+            <div className="h-96">
+              <Bar data={attendanceData} options={barOptions} />
+            </div>
+          </div>
+
+          {/* Chart 2 */}
+          <div className="bg-white rounded-xl p-6 shadow-md border border-gray-100">
+            <div className="flex justify-between items-start mb-4">
+              <h3 className="text-lg font-medium text-gray-700">
+                Weekly Sales
+              </h3>
+              <div className="text-right">
+                <div className="text-2xl font-bold text-gray-800">
+                  ${analytics.weeklyTotalSales?.toLocaleString() || "0"}
+                </div>
+                <div className="text-xs text-gray-500">
+                  {analytics.lastUpdated || "N/A"}
+                </div>
+              </div>
+            </div>
+            <div className="h-96">
+              <Line data={ticketSalesData} options={lineOptions} />
+            </div>
+          </div>
+
+          {/* Chart 3 */}
+          <div className="bg-white rounded-xl p-6 shadow-md border border-gray-100">
+            <h3 className="text-lg font-medium text-gray-700 mb-6">
+              Ticket Sales Distribution
+            </h3>
+            <div className="flex flex-col md:flex-row items-center justify-center gap-8 h-80">
+              <div className="relative w-64 h-64">
+                <Doughnut
+                  data={ticketProgressData}
+                  options={ticketProgressOptions}
+                />
+                <div className="absolute inset-0 flex items-center justify-center text-3xl font-bold text-gray-800">
+                  {analytics.ticketProgress || 0}%
+                </div>
+              </div>
+              <div className="flex flex-col gap-6">
+                <div className="flex items-center text-base text-gray-600">
+                  <span className="w-5 h-5 rounded-full bg-indigo-500 mr-3"></span>
+                  <span>
+                    Online Sales: {onlineSales.toLocaleString()} tickets ($
+                    {(onlineSales * 25).toLocaleString()})
+                  </span>
+                </div>
+                <div className="flex items-center text-base text-gray-600">
+                  <span className="w-5 h-5 rounded-full bg-orange-500 mr-3"></span>
+                  <span>
+                    Offline Sales: {offlineSales.toLocaleString()} tickets ($
+                    {(offlineSales * 25).toLocaleString()})
+                  </span>
+                </div>
+                <div className="flex items-center text-lg font-medium text-gray-800 mt-3">
+                  <span>
+                    Total: {totalSales.toLocaleString()} tickets ($
+                    {(totalSales * 25).toLocaleString()})
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
 }
-
-// Chart options outside component
-const barOptions = {
-  responsive: true,
-  maintainAspectRatio: true,
-  plugins: {
-    legend: {
-      position: "top",
-      align: "end",
-      labels: {
-        boxWidth: 12,
-        usePointStyle: true,
-        pointStyle: "circle",
-      },
-    },
-    title: { display: false },
-  },
-  scales: {
-    x: { grid: { display: false } },
-    y: {
-      beginAtZero: true,
-      grid: { borderDash: [5, 5] },
-      ticks: { stepSize: 10 },
-    },
-  },
-};
-
-const lineOptions = {
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    legend: { display: false },
-  },
-  scales: {
-    x: { grid: { display: false } },
-    y: {
-      beginAtZero: true,
-      grid: { borderDash: [5, 5] },
-      ticks: { display: false },
-    },
-  },
-  elements: { line: { borderWidth: 2 } },
-};
