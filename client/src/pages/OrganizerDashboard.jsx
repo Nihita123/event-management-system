@@ -8,6 +8,8 @@ import "./OrganizerDashboard.css";
 export default function OrganizerDashboard() {
   const [events, setEvents] = useState([]);
   const [filteredEvents, setFilteredEvents] = useState([]);
+  const [registrations, setRegistrations] = useState([]);
+
   const [activeFilter, setActiveFilter] = useState("all");
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [isFormVisible, setIsFormVisible] = useState(false);
@@ -33,6 +35,22 @@ export default function OrganizerDashboard() {
     }
   };
 
+  const fetchRegistrations = async () => {
+    try {
+      const res = await fetch(
+        "http://localhost:5000/api/registrations/my-registrations",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      if (!res.ok) throw new Error("Failed to fetch registrations");
+      const data = await res.json();
+      setRegistrations(data);
+    } catch (err) {
+      console.error("Error fetching registrations:", err);
+    }
+  };
+
   const applyFilter = (filter, eventsData = events) => {
     const now = new Date();
 
@@ -52,6 +70,7 @@ export default function OrganizerDashboard() {
   useEffect(() => {
     if (token) {
       fetchEvents();
+      fetchRegistrations();
     }
   }, [token]);
 
@@ -208,7 +227,11 @@ export default function OrganizerDashboard() {
 
               <div className="dashboard-top-row">
                 <div className="analytics-overview">
-                  <AnalyticsPanel />
+                  <AnalyticsPanel
+                    events={events}
+                    registrations={registrations}
+                    fullView={activeTab === "analytics"}
+                  />
                 </div>
 
                 <div className="calendar-container">
@@ -324,7 +347,11 @@ export default function OrganizerDashboard() {
               <div className="page-header">
                 <h1>Analytics</h1>
               </div>
-              <AnalyticsPanel fullView={true} />
+              <AnalyticsPanel
+                fullView={true}
+                events={events}
+                registrations={registrations}
+              />
             </div>
           )}
         </div>

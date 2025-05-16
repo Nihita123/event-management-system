@@ -6,6 +6,7 @@ import eventRoutes from "./routes/events.js"; // ES module import
 import authRoutes from "./routes/authRoutes.js"; // Correct import for authRoutes
 
 import analyticsRoutes from "./routes/analyticsRoutes.js";
+import registrationRoutes from "./routes/registrations.js";
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/analytics", analyticsRoutes);
+app.use("/api/registrations", registrationRoutes);
 
 // Example route
 app.get("/", (req, res) => res.send("API running"));
