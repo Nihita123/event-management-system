@@ -176,7 +176,11 @@ router.post("/:id/register", verifyToken, async (req, res) => {
 router.get("/my-registrations", verifyToken, async (req, res) => {
   try {
     const userId = req.user.id;
-    const registeredEvents = await Event.find({ registrations: userId });
+    const registrations = await Registration.find({ user: userId }).populate(
+      "event"
+    );
+    const registeredEvents = registrations.map((reg) => reg.event);
+
     res.status(200).json(registeredEvents);
   } catch (err) {
     res.status(500).json({ error: err.message });

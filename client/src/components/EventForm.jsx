@@ -9,12 +9,21 @@ export default function EventForm({
   const { user, token } = useContext(AuthContext);
   // Using context to get the user data
 
+  // Add to formData state
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     date: "",
+    time: "",
     location: "",
+    ticketPrice: "",
+    category: "",
   });
+
+  useEffect(() => {
+    console.log("🔍 token state:", token);
+    console.log("🔍 user state:", user);
+  }, [token, user]);
 
   useEffect(() => {
     if (selectedEvent) {
@@ -22,10 +31,13 @@ export default function EventForm({
         title: selectedEvent.title,
         description: selectedEvent.description,
         date: selectedEvent.date.split("T")[0],
+        time: selectedEvent.time || "", // <-- add this
         location: selectedEvent.location,
+        ticketPrice: selectedEvent.ticketPrice,
+        category: selectedEvent.category,
       });
     }
-  }, [selectedEvent]); // Depend on selectedEvent to re-run when it changes
+  }, [selectedEvent]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -47,10 +59,19 @@ export default function EventForm({
       },
       body: JSON.stringify(formData),
     });
-    console.log("🧪 user.token:", user?.token);
+    console.log("🧪 token from context:", token);
 
     if (res.ok) {
-      setFormData({ title: "", description: "", date: "", location: "" });
+      setFormData({
+        title: "",
+        description: "",
+        date: "",
+        time: "",
+        location: "",
+        ticketPrice: "",
+        category: "",
+      });
+
       setSelectedEvent(null);
       fetchEvents(); // Refresh list of events after submission
     } else {
@@ -87,6 +108,28 @@ export default function EventForm({
         value={formData.location}
         onChange={handleChange}
       />
+      <input
+        type="time"
+        name="time"
+        value={formData.time}
+        onChange={handleChange}
+        required
+      />
+      <input
+        type="number"
+        name="ticketPrice"
+        placeholder="Ticket Price"
+        value={formData.ticketPrice}
+        onChange={handleChange}
+      />
+
+      <input
+        name="category"
+        placeholder="Category"
+        value={formData.category}
+        onChange={handleChange}
+      />
+
       <button type="submit">{selectedEvent ? "Update" : "Create"}</button>
       {selectedEvent && (
         <button type="button" onClick={() => setSelectedEvent(null)}>

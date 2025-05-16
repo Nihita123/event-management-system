@@ -1,9 +1,7 @@
-// middleware/authMiddleware.js
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
 
 const verifyToken = (req, res, next) => {
   const token = req.header("Authorization")?.replace("Bearer ", "");
-  console.log("Token in authMiddleware:", token);
   if (!token) {
     return res.status(401).send({ error: "Authentication required" });
   }
@@ -17,6 +15,4 @@ const verifyToken = (req, res, next) => {
   }
 };
 
-console.log("JWT_SECRET:", process.env.JWT_SECRET);
-
-module.exports = verifyToken;
+export default verifyToken;
