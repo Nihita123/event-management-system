@@ -26,6 +26,7 @@ ChartJS.register(
   Legend,
   Filler
 );
+import "./AnalyticsPanel.css";
 
 export default function EnhancedAnalyticsPanel({
   fullView = false,
@@ -197,9 +198,9 @@ export default function EnhancedAnalyticsPanel({
     ],
   };
 
-  const barOptions = {
+  const chartOptions = {
     responsive: true,
-    maintainAspectRatio: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: { display: false },
     },
@@ -215,7 +216,7 @@ export default function EnhancedAnalyticsPanel({
 
   const revenueOptions = {
     responsive: true,
-    maintainAspectRatio: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: { display: false },
     },
@@ -267,54 +268,58 @@ export default function EnhancedAnalyticsPanel({
     }).format(amount);
   };
 
-  // Key Metrics component with wider layout
+  // Key Metrics component with consistent card heights
   const KeyMetrics = () => (
-    <div className="bg-gray-50 rounded-xl p-8 shadow-md border border-gray-100">
-      <h3 className="text-xl font-medium text-gray-700 mb-6">Key Metrics</h3>
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-        <div className="p-6 bg-gray-50 rounded-lg">
-          <div className="text-base text-gray-600 mb-2">Total Events</div>
-          <div className="text-4xl font-bold text-gray-800">
-            {analytics.analytics.length}
-          </div>
+    <div className="analytics-panel">
+      <div className="analytics-header">
+        <h2>Key Metrics</h2>
+      </div>
+      <div className="analytics-overview-grid">
+        <div className="analytics-card">
+          <h3>Total Events</h3>
+          <div className="stat-value">{analytics.analytics.length}</div>
         </div>
-        <div className="p-6 bg-gray-50 rounded-lg">
-          <div className="text-base text-gray-600 mb-2">Total Attendees</div>
-          <div className="text-4xl font-bold text-gray-800">
-            {totalAttendees.toLocaleString()}
-          </div>
+        <div className="analytics-card">
+          <h3>Total Attendees</h3>
+          <div className="stat-value">{totalAttendees.toLocaleString()}</div>
         </div>
-        <div className="p-6 bg-gray-50 rounded-lg">
-          <div className="text-base text-gray-600 mb-2">Total Revenue</div>
-          <div className="text-4xl font-bold text-gray-800">
+        <div className="analytics-card">
+          <h3>Total Revenue</h3>
+          <div className="stat-value">
             {formatCurrency(analytics.totalRevenue)}
           </div>
         </div>
-        <div className="p-6 bg-gray-50 rounded-lg">
-          <div className="text-base text-gray-600 mb-2">Avg. Ticket Price</div>
-          <div className="text-4xl font-bold text-gray-800">
-            {formatCurrency(avgTicketPrice)}
-          </div>
+        <div className="analytics-card">
+          <h3>Avg. Ticket Price</h3>
+          <div className="stat-value">{formatCurrency(avgTicketPrice)}</div>
         </div>
       </div>
     </div>
   );
 
-  // For dashboard view, show only one chart with increased width
+  // For dashboard view, show two charts side by side
   if (!fullView) {
     return (
-      <div
-        className="bg-white rounded-xl shadow-lg w-full mx-auto"
-        style={{ maxWidth: "100vw" }}
-      >
-        <div className="p-6">
-          <h3 className="text-lg font-medium text-gray-700 mb-4">
-            Weekly Sales
-          </h3>
-          <div className="h-72 mb-4">
-            <Line data={ticketSalesData} options={lineOptions} />
+      <div className="analytics-panel">
+        <div className="analytics-header">
+          <h2>Event Analytics</h2>
+        </div>
+        <div className="analytics-content">
+          <div className="charts-row">
+            <div className="chart-card">
+              <h3>Weekly Sales</h3>
+              <div className="chart-container">
+                <Line data={ticketSalesData} options={lineOptions} />
+              </div>
+            </div>
+            <div className="chart-card">
+              <h3>Event Attendance</h3>
+              <div className="chart-container">
+                <Bar data={attendanceData} options={chartOptions} />
+              </div>
+            </div>
           </div>
-          <div className="text-xs text-gray-500 mt-2 text-right">
+          <div className="last-updated">
             Last updated: {analytics.lastUpdated || "N/A"}
           </div>
         </div>
@@ -322,79 +327,74 @@ export default function EnhancedAnalyticsPanel({
     );
   }
 
-  // For full analytics page view, show all charts in a grid with maximum width
+  // For full analytics page view, show all charts with consistent sizing
   return (
-    <div
-      className="bg-white rounded-xl shadow-lg w-full"
-      style={{ maxWidth: "100vw" }}
-    >
-      <div className="p-8">
+    <div className="analytics-panel full-view">
+      <div className="analytics-header">
+        <h2>Complete Analytics Dashboard</h2>
+      </div>
+      <div className="analytics-content">
         {/* Key Metrics */}
         <KeyMetrics />
 
-        {/* Charts Grid Layout - Extra wide version */}
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 mt-8">
-          {/* Chart 1 */}
-          <div className="bg-white rounded-xl p-6 shadow-md border border-gray-100">
-            <h3 className="text-lg font-medium text-gray-700 mb-4">
-              Event Attendance
-            </h3>
-            <div className="h-96">
-              <Bar data={attendanceData} options={barOptions} />
+        {/* First row of charts */}
+        <div className="section-header">
+          <h3>EVENT PERFORMANCE</h3>
+        </div>
+        <div className="charts-row">
+          <div className="chart-card">
+            <h3>Event Attendance</h3>
+            <div className="chart-container">
+              <Bar data={attendanceData} options={chartOptions} />
             </div>
           </div>
-
-          {/* Chart 2 */}
-          <div className="bg-white rounded-xl p-6 shadow-md border border-gray-100">
-            <div className="flex justify-between items-start mb-4">
-              <h3 className="text-lg font-medium text-gray-700">
-                Weekly Sales
-              </h3>
-              <div className="text-right">
-                <div className="text-2xl font-bold text-gray-800">
-                  {formatCurrency(analytics.weeklyTotalSales || 0)}
-                </div>
-                <div className="text-xs text-gray-500">
-                  {analytics.lastUpdated || "N/A"}
-                </div>
-              </div>
+          <div className="chart-card">
+            <h3>Event Revenue</h3>
+            <div className="chart-container">
+              <Bar data={revenueData} options={revenueOptions} />
             </div>
-            <div className="h-96">
+          </div>
+        </div>
+
+        {/* Second row of charts */}
+        <div className="section-header">
+          <h3>SALES ANALYSIS</h3>
+        </div>
+        <div className="charts-row">
+          <div className="chart-card">
+            <h3>Weekly Sales</h3>
+            <div className="chart-container">
               <Line data={ticketSalesData} options={lineOptions} />
             </div>
           </div>
-
-          {/* Chart 3 */}
-          <div className="bg-white rounded-xl p-6 shadow-md border border-gray-100">
-            <h3 className="text-lg font-medium text-gray-700 mb-6">
-              Ticket Sales Distribution
-            </h3>
-            <div className="flex flex-col md:flex-row items-center justify-center gap-8 h-80">
-              <div className="relative w-64 h-64">
+          <div className="chart-card">
+            <h3>Sales Distribution</h3>
+            <div className="chart-container distribution-chart">
+              <div
+                className="doughnut-wrapper"
+                data-label={`${analytics.ticketProgress}%`}
+              >
                 <Doughnut
                   data={ticketProgressData}
                   options={ticketProgressOptions}
                 />
-                <div className="absolute inset-0 flex items-center justify-center text-3xl font-bold text-gray-800">
-                  {analytics.ticketProgress || 0}%
-                </div>
               </div>
-              <div className="flex flex-col gap-6">
-                <div className="flex items-center text-base text-gray-600">
-                  <span className="w-5 h-5 rounded-full bg-indigo-500 mr-3"></span>
+              <div className="distribution-legend">
+                <div className="legend-item">
+                  <span className="dot online"></span>
                   <span>
-                    Online Sales: {onlineSales.toLocaleString()} tickets (
+                    Online: {onlineSales.toLocaleString()} tickets (
                     {formatCurrency(onlineSales * avgTicketPrice)})
                   </span>
                 </div>
-                <div className="flex items-center text-base text-gray-600">
-                  <span className="w-5 h-5 rounded-full bg-orange-500 mr-3"></span>
+                <div className="legend-item">
+                  <span className="dot offline"></span>
                   <span>
-                    Offline Sales: {offlineSales.toLocaleString()} tickets (
+                    Offline: {offlineSales.toLocaleString()} tickets (
                     {formatCurrency(offlineSales * avgTicketPrice)})
                   </span>
                 </div>
-                <div className="flex items-center text-lg font-medium text-gray-800 mt-3">
+                <div className="legend-item total">
                   <span>
                     Total: {totalSales.toLocaleString()} tickets (
                     {formatCurrency(totalSales * avgTicketPrice)})
@@ -405,62 +405,40 @@ export default function EnhancedAnalyticsPanel({
           </div>
         </div>
 
-        {/* New Section: Event Revenue Chart */}
-        <div className="mt-8">
-          <div className="bg-white rounded-xl p-6 shadow-md border border-gray-100">
-            <h3 className="text-lg font-medium text-gray-700 mb-4">
-              Event Revenue Breakdown
-            </h3>
-            <div className="h-96">
-              <Bar data={revenueData} options={revenueOptions} />
-            </div>
-          </div>
-        </div>
-
-        {/* Registration Breakdown by Event */}
+        {/* Registration Breakdown */}
         {Object.keys(analytics.registrationsByEvent).length > 0 && (
-          <div className="mt-8">
-            <div className="bg-white rounded-xl p-6 shadow-md border border-gray-100">
-              <h3 className="text-lg font-medium text-gray-700 mb-6">
-                Registration Breakdown by Event
-              </h3>
-              <div className="overflow-x-auto">
-                <table className="min-w-full bg-white">
-                  <thead>
-                    <tr>
-                      <th className="py-3 px-4 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Event Name
-                      </th>
-                      <th className="py-3 px-4 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Registrations
-                      </th>
-                      <th className="py-3 px-4 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                        Revenue
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200">
-                    {Object.entries(analytics.registrationsByEvent).map(
-                      ([eventId, data]) => (
-                        <tr key={eventId}>
-                          <td className="py-4 px-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                            {data.title}
-                          </td>
-                          <td className="py-4 px-4 whitespace-nowrap text-sm text-gray-500">
-                            {data.count}
-                          </td>
-                          <td className="py-4 px-4 whitespace-nowrap text-sm text-gray-500">
-                            {formatCurrency(data.revenue)}
-                          </td>
-                        </tr>
-                      )
-                    )}
-                  </tbody>
-                </table>
-              </div>
+          <>
+            <div className="section-header">
+              <h3>REGISTRATION BREAKDOWN</h3>
             </div>
-          </div>
+            <div className="registration-table-container">
+              <table className="registration-table">
+                <thead>
+                  <tr>
+                    <th>Event Name</th>
+                    <th>Registrations</th>
+                    <th>Revenue</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Object.entries(analytics.registrationsByEvent).map(
+                    ([eventId, data]) => (
+                      <tr key={eventId}>
+                        <td>{data.title}</td>
+                        <td>{data.count}</td>
+                        <td>{formatCurrency(data.revenue)}</td>
+                      </tr>
+                    )
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
+
+        <div className="last-updated">
+          Last updated: {analytics.lastUpdated || "N/A"}
+        </div>
       </div>
     </div>
   );

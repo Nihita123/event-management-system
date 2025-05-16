@@ -1,10 +1,9 @@
 /* OrganizerDashboard.css */
 
 body {
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-  background-color: #f7f9fc;
-  color: #333;
+  font-family: var(--font-family);
+  background-color: var(--bg-main);
+  color: var(--text-primary);
   margin: 0;
   padding: 0;
 }
@@ -12,14 +11,14 @@ body {
 /* Dashboard Layout */
 .dashboard-container {
   display: flex;
-  width: 100%;
+  width: clac(100% - 240px);
   min-height: 100vh;
 }
 
 .dashboard-sidebar {
-  background-color: #f9b0b6;
-  width: 240px;
-  padding: 24px 16px;
+  background-color: #ff6b6b;
+  width: var(--sidebar-width);
+  padding: var(--spacing-xl) var(--spacing-lg);
   display: flex;
   flex-direction: column;
   color: white;
@@ -29,7 +28,8 @@ body {
   top: 0;
   overflow-y: auto;
   z-index: 100;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-lg);
+  border-right: 1px solid rgba(245, 181, 181, 0.1);
 }
 
 .dashboard-main {
@@ -40,7 +40,10 @@ body {
 }
 
 .dashboard-content {
-  padding: 24px 32px;
+  padding: 32px 48px;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
 }
 
 /* Logo */
@@ -58,29 +61,33 @@ body {
 }
 
 .nav-item {
-  display: block;
+  display: flex;
+  align-items: center;
   width: 100%;
-  padding: 12px 16px;
-  margin-bottom: 8px;
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   text-align: left;
-  font-size: 15px;
-  font-weight: 500;
+  font-size: var(--text-base);
+  font-weight: var(--font-medium);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all var(--transition-fast);
   background-color: transparent;
   color: rgba(255, 255, 255, 0.9);
+  letter-spacing: 0.3px;
 }
 
 .nav-item:hover {
   background-color: rgba(255, 255, 255, 0.15);
+  transform: translateX(4px);
 }
 
 .nav-item.active {
   background-color: rgba(255, 255, 255, 0.25);
   color: white;
-  font-weight: 600;
+  font-weight: var(--font-semibold);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Filter Section */
@@ -89,11 +96,11 @@ body {
 }
 
 .filter-title {
-  font-size: 14px;
-  margin-bottom: 12px;
-  padding-left: 16px;
+  font-size: var(--text-sm);
+  margin-bottom: var(--spacing-md);
+  padding-left: var(--spacing-md);
   color: rgba(255, 255, 255, 0.8);
-  font-weight: 500;
+  font-weight: var(--font-medium);
 }
 
 .filters {
@@ -105,14 +112,14 @@ body {
 .filter-btn {
   display: block;
   width: 100%;
-  padding: 10px 16px;
+  padding: var(--spacing-sm) var(--spacing-md);
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   text-align: left;
-  font-size: 14px;
-  font-weight: 500;
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: var(--transition-fast);
   background-color: transparent;
   color: rgba(255, 255, 255, 0.8);
 }
@@ -131,9 +138,9 @@ body {
   margin-top: auto;
   display: flex;
   align-items: center;
-  padding: 16px;
+  padding: var(--spacing-md);
   border-top: 1px solid rgba(255, 255, 255, 0.15);
-  margin-top: 24px;
+  margin-top: var(--spacing-lg);
 }
 
 .user-avatar {
@@ -160,15 +167,17 @@ body {
 
 /* Page Title */
 .page-title {
-  font-size: 24px;
-  font-weight: 600;
-  margin-bottom: 24px;
-  color: #333;
+  font-size: var(--text-2xl);
+  font-weight: var(--font-semibold);
+  margin-bottom: var(--spacing-lg);
+  color: var(--text-primary);
 }
 
 /* Dashboard Overview */
 .dashboard-overview {
   width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .dashboard-top-row {
@@ -182,7 +191,7 @@ body {
 }
 
 .calendar-container {
-  width: 380px;
+  width: 420px;
   background-color: white;
   border-radius: 12px;
   padding: 20px;
@@ -320,18 +329,18 @@ body {
 }
 
 .create-event-btn {
-  background-color: #ff4757;
+  background-color: var(--secondary-color);
   color: white;
   border: none;
-  border-radius: 8px;
-  padding: 12px 20px;
-  font-weight: 500;
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-weight: var(--font-medium);
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: var(--transition-fast);
 }
 
 .create-event-btn:hover {
-  background-color: #ff6b6b;
+  background-color: var(--secondary-hover);
 }
 
 /* Form Container */
@@ -353,7 +362,10 @@ body {
 .events-container {
   background-color: white;
   border-radius: 12px;
-  padding: 24px;
+  padding: 32px;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
