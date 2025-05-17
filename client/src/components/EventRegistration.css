@@ -60,7 +60,7 @@
 }
 
 .ticket-price .detail-value {
-  color: #6c5dd3;
+  color: var(--primary-color);
   font-size: 1.1rem;
 }
 
@@ -85,8 +85,8 @@
 }
 
 .registration-type-option.selected {
-  border-color: #6c5dd3;
-  background: rgba(108, 93, 211, 0.05);
+  border-color: var(--primary-color);
+  background: rgba(37, 99, 235, 0.05);
 }
 
 .registration-type-option input {
@@ -131,8 +131,8 @@
 }
 
 .payment-method.selected {
-  border-color: #6c5dd3;
-  background: rgba(108, 93, 211, 0.05);
+  border-color: var(--primary-color);
+  background: rgba(37, 99, 235, 0.05);
 }
 
 .payment-method input {

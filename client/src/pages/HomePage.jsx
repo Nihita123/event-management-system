@@ -1,191 +1,213 @@
 import "./HomePage.css";
 import { Link } from "react-router-dom";
-import {
-  Calendar,
-  Users,
-  Award,
-  MapPin,
-  Mail,
-  Phone,
-  Menu,
-} from "lucide-react";
 import { useState } from "react";
 
 const HomePage = () => {
   const [navOpen, setNavOpen] = useState(false);
 
-  const upcomingEvents = [
-    { title: "Startup Expo", date: "2025-05-20", location: "Hyderabad" },
-    {
-      title: "Tech Talk: Future of AI",
-      date: "2025-06-05",
-      location: "Bangalore",
-    },
-    { title: "Networking Night", date: "2025-06-12", location: "Mumbai" },
-  ];
-
-  const testimonials = [
-    {
-      name: "Aarav Patel",
-      feedback:
-        "This platform revolutionized how we manage our college events. Incredibly intuitive!",
-    },
-    {
-      name: "Diya Sharma",
-      feedback:
-        "Seamless event organization. The user experience is top-notch and makes planning a breeze.",
-    },
-    {
-      name: "Kabir Singh",
-      feedback:
-        "A game-changer for student groups and clubs. Highly recommend for event management!",
-    },
-  ];
-
   return (
     <div className="homepage">
-      {/* Navbar */}
-      <nav className="navbar">
-        <div className="logo">EventManager</div>
-        <button className="nav-toggle" onClick={() => setNavOpen(!navOpen)}>
-          <Menu size={24} />
-        </button>
-        <ul className={`nav-links ${navOpen ? "open" : ""}`}>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/login">Login</Link>
-          </li>
-          <li>
-            <Link to="/signup" className="highlighted">
-              Sign Up
-            </Link>
-          </li>
-        </ul>
-      </nav>
+      {/* Header/Navbar */}
+      <header>
+        <div className="logo-container">
+          <div className="logo">Q</div>
+          <span className="logo-text">Productions</span>
+        </div>
+        <nav>
+          <ul className={`nav-links ${navOpen ? "open" : ""}`}>
+            <li>
+              <a href="#services">Services</a>
+            </li>
+            <li>
+              <a href="#about">About</a>
+            </li>
+            <li>
+              <a href="#contact">Contact</a>
+            </li>
+            <li>
+              <a href="#more">More</a>
+            </li>
+          </ul>
+          <div className="nav-right">
+            <div className="cart-icon">
+              <span className="cart-count">0</span>
+            </div>
+            <div className="social-icons">
+              <a href="#facebook" className="social-icon">
+                f
+              </a>
+              <a href="#instagram" className="social-icon">
+                i
+              </a>
+            </div>
+          </div>
+          <button className="nav-toggle" onClick={() => setNavOpen(!navOpen)}>
+            ☰
+          </button>
+        </nav>
+      </header>
 
       {/* Hero Section */}
       <section className="hero-section">
-        <h1>Let's Make Your Event Memorable!</h1>
-        <p>
-          Simplify event planning, boost engagement, and create unforgettable
-          experiences.
-        </p>
-        <div className="hero-buttons">
+        <div className="hero-content">
+          <h2>Welcome to Evento</h2>
+          <h1>
+            Crafting
+            <br />
+            Unforgettable
+            <br />
+            Moments for You
+          </h1>
           <Link to="/login">
-            <button className="login-btn">Login</button>
-          </Link>
-          <Link to="/signup">
-            <button className="signup-btn">Sign Up Free!</button>
+            <button className="cta-button">Explore Our Upcoming Events</button>
           </Link>
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="stats-bar">
-        <div>
-          <p className="stat-number">10,000+</p>
-          <p>Events Hosted</p>
-        </div>
-        <div>
-          <p className="stat-number">50,000+</p>
-          <p>Happy Users</p>
-        </div>
-        <div>
-          <p className="stat-number">98%</p>
-          <p>Satisfaction Rate</p>
-        </div>
-      </section>
+      {/* Services Section */}
+      <section id="services" className="services-section">
+        <h2>OUR SERVICES</h2>
 
-      {/* About */}
-      <section className="about-section">
-        <h2>About Us</h2>
-        <p>
-          We are a dedicated team passionate about simplifying event management
-          for organizations, clubs, and individuals. Our platform streamlines
-          the entire event lifecycle from planning to execution.
-        </p>
-        <img src="/event-about.jpg" alt="About Event Management" />
-      </section>
-
-      {/* Features */}
-      <section className="features-section">
-        <h2>Our Features</h2>
-        <div className="features-grid">
-          <div className="feature">
-            <Calendar size={32} />
-            <h3>Event Scheduling</h3>
+        <div className="services-grid">
+          <div className="service-column">
+            <div className="service-image">
+              <img src="/api/placeholder/400/250" alt="Corporate Events" />
+            </div>
+            <h3>Corporate Events</h3>
             <p>
-              Effortlessly create and manage event timelines with our intuitive
-              scheduling tools.
+              From product launches to corporate galas, we curate and execute
+              memorable corporate events that align with your brand's vision and
+              objectives.
             </p>
           </div>
-          <div className="feature">
-            <Users size={32} />
-            <h3>Attendee Management</h3>
+
+          <div className="service-column">
+            <div className="service-image">
+              <img src="/api/placeholder/400/250" alt="Social Events" />
+            </div>
+            <h3>Social Events</h3>
             <p>
-              Track RSVPs, send notifications, and engage with your attendees
-              seamlessly.
+              Whether it's a grand wedding or an intimate birthday celebration,
+              we specialize in creating unforgettable social events tailored to
+              your unique style and preferences.
             </p>
           </div>
-          <div className="feature">
-            <Award size={32} />
-            <h3>Club Recognition</h3>
+
+          <div className="service-column">
+            <div className="service-image">
+              <img src="/api/placeholder/400/250" alt="Event Production" />
+            </div>
+            <h3>Event Production</h3>
             <p>
-              Showcase your events and gain visibility within your community.
+              Our team of experienced professionals handles every aspect of
+              event production, from conceptualization to execution, ensuring a
+              seamless and remarkable experience for all attendees.
             </p>
           </div>
         </div>
-      </section>
 
-      {/* Upcoming Events */}
-      <section className="events-section">
-        <h2>Upcoming Events</h2>
-        <ul className="events-list">
-          {upcomingEvents.map((event, index) => (
-            <li key={index}>
-              <MapPin size={18} /> <strong>{event.title}</strong> - {event.date}{" "}
-              ({event.location})
-            </li>
-          ))}
-        </ul>
-      </section>
+        <div className="services-grid">
+          <div className="service-column">
+            <div className="service-image">
+              <img src="/api/placeholder/400/250" alt="Catering Services" />
+            </div>
+            <h3>Catering Services</h3>
+            <p>
+              Elevate your event with our premium catering options, featuring
+              exquisite cuisine and impeccable service.
+            </p>
+          </div>
 
-      {/* Testimonials */}
-      <section className="testimonials-section">
-        <h2>What Our Users Say</h2>
-        <div className="testimonials">
-          {testimonials.map((t, index) => (
-            <blockquote key={index} className="testimonial">
-              <p>"{t.feedback}"</p>
-              <footer>- {t.name}</footer>
-            </blockquote>
-          ))}
+          <div className="service-column">
+            <div className="service-image">
+              <img
+                src="/api/placeholder/400/250"
+                alt="Entertainment Services"
+              />
+            </div>
+            <h3>Entertainment Services</h3>
+            <p>
+              From live music to interactive performances, we provide top-tier
+              entertainment options to create memorable experiences.
+            </p>
+          </div>
+
+          <div className="service-column">
+            <div className="service-image">
+              <img src="/api/placeholder/400/250" alt="Beverage Services" />
+            </div>
+            <h3>Beverage Services</h3>
+            <p>
+              Complement your event with our premium beverage services, offering
+              delightful and refreshing drinks throughout the event.
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* CTA */}
+      {/* CTA Section */}
       <section className="cta-section">
-        <h2>Ready to Elevate Your Event Management?</h2>
-        <p>
-          Join thousands of satisfied users and transform how you plan events!
-        </p>
-        <Link to="/signup">
-          <button className="cta-btn">Get Started Now</button>
-        </Link>
+        <h2>PLANNING YOUR NEXT EVENT?</h2>
+        <div className="cta-buttons">
+          <Link to="/login">
+            <button className="black-button">Get Started</button>
+          </Link>
+          <button className="outline-button">Explore Our Portfolio</button>
+        </div>
       </section>
 
-      {/* Contact */}
-      <section className="contact-section">
-        <h2>Contact Us</h2>
+      {/* About Section */}
+      <section id="about" className="about-section">
+        <h2>Welcome to Evento</h2>
         <p>
-          <Mail size={18} /> support@eventmanager.com
-        </p>
-        <p>
-          <Phone size={18} /> +91 98765 43210
+          Evento is an innovative Event Management System (EMS) designed to
+          simplify the process of planning and organizing events. With Evento,
+          you can effortlessly create, manage, and analyze various types of
+          events such as conferences, workshops, concerts, weddings, and
+          corporate meetings. Our platform offers a user-friendly interface and
+          a wide range of features to ensure a seamless event management
+          experience.
         </p>
       </section>
+
+      {/* Contact Section */}
+      <section id="contact" className="contact-section">
+        <h2>GET IN TOUCH</h2>
+        <div className="contact-container">
+          <h3>Start Planning Your Next Event with Us</h3>
+
+          <div className="contact-info">
+            <div className="contact-item">
+              <h4>Phone</h4>
+              <p>123-456-7890</p>
+            </div>
+
+            <div className="contact-item">
+              <h4>Address</h4>
+              <p>123 Evento Ave, Eventoville, EV 12345</p>
+            </div>
+
+            <div className="contact-item">
+              <h4>Email</h4>
+              <p>hello@evento.com</p>
+            </div>
+          </div>
+
+          <div className="form-info">
+            <p>Add a form</p>
+            <p className="form-subtext">
+              Choose an existing form or create a new one.
+              <br />
+              Go to Form Settings-Forms tab
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer>
+        <p>© 2025 by Q Productions. Powered and secured by Wix.</p>
+      </footer>
     </div>
   );
 };

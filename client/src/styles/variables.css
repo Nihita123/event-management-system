@@ -1,9 +1,9 @@
 :root {
   /* Colors */
-  --primary-color: #6c5dd3;
-  --primary-hover: #5a4cbb;
-  --secondary-color: #ff4757;
-  --secondary-hover: #ff6b6b;
+  --primary-color: #2563eb;
+  --primary-hover: #1d4ed8;
+  --secondary-color: #64748b;
+  --secondary-hover: #475569;
 
   /* Background Colors */
   --bg-main: #f7f9fc;

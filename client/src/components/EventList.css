@@ -58,7 +58,7 @@
 .event-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-lg);
-  border-color: var(--secondary-color);
+  border-color: var(--primary-color);
 }
 
 /* Event Card Header */
@@ -100,7 +100,7 @@
 
 .edit-btn:hover {
   background-color: var(--bg-hover);
-  color: var(--secondary-color);
+  color: var(--primary-color);
 }
 
 .delete-btn:hover {
@@ -169,7 +169,7 @@
 }
 
 .view-details-btn {
-  background-color: var(--secondary-color);
+  background-color: var(--primary-color);
   color: white;
   border: none;
   border-radius: var(--radius-md);
@@ -181,7 +181,7 @@
 }
 
 .view-details-btn:hover {
-  background-color: var(--secondary-hover);
+  background-color: var(--primary-hover);
 }
 
 .event-status {
