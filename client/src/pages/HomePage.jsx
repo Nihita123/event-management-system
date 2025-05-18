@@ -10,8 +10,7 @@ const HomePage = () => {
       {/* Header/Navbar */}
       <header>
         <div className="logo-container">
-          <div className="logo">Q</div>
-          <span className="logo-text">Productions</span>
+          <div className="logo">Evento</div>
         </div>
         <nav>
           <ul className={`nav-links ${navOpen ? "open" : ""}`}>
@@ -29,18 +28,11 @@ const HomePage = () => {
             </li>
           </ul>
           <div className="nav-right">
-            <div className="cart-icon">
-              <span className="cart-count">0</span>
-            </div>
-            <div className="social-icons">
-              <a href="#facebook" className="social-icon">
-                f
-              </a>
-              <a href="#instagram" className="social-icon">
-                i
-              </a>
-            </div>
+            <Link to="/login" className="nav-link">
+              LogIn/SignUp
+            </Link>
           </div>
+
           <button className="nav-toggle" onClick={() => setNavOpen(!navOpen)}>
             ☰
           </button>
@@ -193,14 +185,44 @@ const HomePage = () => {
             </div>
           </div>
 
-          <div className="form-info">
-            <p>Add a form</p>
-            <p className="form-subtext">
-              Choose an existing form or create a new one.
-              <br />
-              Go to Form Settings-Forms tab
-            </p>
-          </div>
+          <form className="contact-form">
+            <div className="form-group">
+              <label htmlFor="name">Name</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Your name"
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Your email"
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="message">Message</label>
+              <textarea
+                id="message"
+                name="message"
+                placeholder="Your message"
+                rows="5"
+                required
+              />
+            </div>
+
+            <button type="submit" className="black-button">
+              Send Message
+            </button>
+          </form>
         </div>
       </section>
 

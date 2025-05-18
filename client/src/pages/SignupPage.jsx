@@ -51,47 +51,60 @@ const SignupPage = () => {
         {signupError && <div className="error-message">{signupError}</div>}
 
         <form className="signup-form" onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="name"
-            placeholder="Full Name"
-            value={formData.name}
-            required
-            onChange={handleChange}
-            disabled={isSubmitting}
-          />
+          <div className="form-group">
+            <label htmlFor="name">Full Name</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={formData.name}
+              required
+              onChange={handleChange}
+              disabled={isSubmitting}
+            />
+          </div>
 
-          <input
-            type="email"
-            name="email"
-            placeholder="Email Address"
-            value={formData.email}
-            required
-            onChange={handleChange}
-            disabled={isSubmitting}
-          />
+          <div className="form-group">
+            <label htmlFor="email">Email Address</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={formData.email}
+              required
+              onChange={handleChange}
+              disabled={isSubmitting}
+            />
+          </div>
 
-          <input
-            type="password"
-            name="password"
-            placeholder="Create Password"
-            value={formData.password}
-            required
-            onChange={handleChange}
-            disabled={isSubmitting}
-          />
+          <div className="form-group">
+            <label htmlFor="password">Create Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={formData.password}
+              required
+              onChange={handleChange}
+              disabled={isSubmitting}
+            />
+          </div>
 
-          <select
-            name="role"
-            value={formData.role}
-            onChange={handleChange}
-            required
-            disabled={isSubmitting}
-          >
-            <option value="attendee">Attendee</option>
-            <option value="organizer">Organizer</option>
-            <option value="admin">Admin</option>
-          </select>
+          <div className="form-group">
+            <label htmlFor="role">Select Role</label>
+            <select
+              id="role"
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+              required
+              disabled={isSubmitting}
+            >
+              <option value="attendee">Attendee</option>
+              <option value="organizer">Organizer</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
 
           <button type="submit" disabled={isSubmitting}>
             {isSubmitting ? "Creating Account..." : "Register"}
