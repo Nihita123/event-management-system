@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../context/AuthContext"; // Make sure the path is correct
+import "./EventForm.css";
 
 export default function EventForm({
   selectedEvent,
@@ -80,9 +81,11 @@ export default function EventForm({
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="event-form-container" onSubmit={handleSubmit}>
       <h3>{selectedEvent ? "Edit Event" : "Create New Event"}</h3>
+
       <input
+        className="event-form-input"
         name="title"
         placeholder="Event Title"
         value={formData.title}
@@ -90,12 +93,14 @@ export default function EventForm({
         required
       />
       <input
+        className="event-form-input"
         name="description"
         placeholder="Description"
         value={formData.description}
         onChange={handleChange}
       />
       <input
+        className="event-form-input"
         type="date"
         name="date"
         value={formData.date}
@@ -103,12 +108,14 @@ export default function EventForm({
         required
       />
       <input
+        className="event-form-input"
         name="location"
         placeholder="Location"
         value={formData.location}
         onChange={handleChange}
       />
       <input
+        className="event-form-input"
         type="time"
         name="time"
         value={formData.time}
@@ -116,23 +123,31 @@ export default function EventForm({
         required
       />
       <input
+        className="event-form-input"
         type="number"
         name="ticketPrice"
         placeholder="Ticket Price"
         value={formData.ticketPrice}
         onChange={handleChange}
       />
-
       <input
+        className="event-form-input"
         name="category"
         placeholder="Category"
         value={formData.category}
         onChange={handleChange}
       />
 
-      <button type="submit">{selectedEvent ? "Update" : "Create"}</button>
+      <button className="event-form-button" type="submit">
+        {selectedEvent ? "Update" : "Create"}
+      </button>
+
       {selectedEvent && (
-        <button type="button" onClick={() => setSelectedEvent(null)}>
+        <button
+          className="event-form-button event-form-cancel"
+          type="button"
+          onClick={() => setSelectedEvent(null)}
+        >
           Cancel
         </button>
       )}

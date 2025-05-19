@@ -1,0 +1,63 @@
+.event-form-container {
+  background-color: #000;
+  color: #fff;
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 24px;
+  border-radius: 8px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.event-form-container h3 {
+  text-align: center;
+  margin-bottom: 24px;
+  font-size: 20px;
+  color: #fff;
+}
+
+.event-form-input,
+.event-form-select,
+.event-form-textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 16px;
+  border: 1px solid #555;
+  border-radius: 4px;
+  background-color: #000;
+  color: #fff;
+  font-size: 14px;
+  outline: none;
+  transition: border 0.3s ease;
+}
+
+.event-form-input:focus,
+.event-form-select:focus,
+.event-form-textarea:focus {
+  border-color: #f5c518;
+}
+
+.event-form-button {
+  background-color: #f5c518;
+  color: #000;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom: 12px;
+  transition: background-color 0.3s ease;
+}
+
+.event-form-button:hover {
+  background-color: #ffdb4d;
+}
+
+.event-form-cancel {
+  background-color: #333;
+  color: #fff;
+}
+
+.event-form-cancel:hover {
+  background-color: #555;
+}

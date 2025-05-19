@@ -62,81 +62,68 @@ export default function EventList({ events, setSelectedEvent, fetchEvents }) {
       ) : (
         <div className="event-cards-grid">
           {sortedEvents.map((event) => {
-            // Use actual data from the event object
             const attendeeCount = event.attendees || 0;
             const capacityPercentage = calculateCapacityPercentage(
               attendeeCount,
               event.capacity
             );
             const revenue = event.revenue || 0;
+            const isUpcoming = new Date(event.date) > new Date();
 
             return (
               <div key={event._id} className="event-card">
-                <div className="event-card-header">
-                  <div className="event-date-tag">{formatDate(event.date)}</div>
-                  <div className="event-actions">
-                    <button
-                      className="edit-btn"
-                      onClick={() => setSelectedEvent(event)}
-                      aria-label="Edit event"
-                    >
-                      <i className="fa-regular fa-pen-to-square"></i>
-                    </button>
-                    <button
-                      className="delete-btn"
-                      onClick={() => handleDelete(event._id)}
-                      aria-label="Delete event"
-                    >
-                      <i className="fa-regular fa-trash-can"></i>
-                    </button>
+                <div className="event-image-container">
+                  {/* Category badge */}
+                  <div className="event-category-badge">
+                    {event.category || "General"}
                   </div>
+
+                  {/* Fallback letter if no image */}
+                  {event.imageUrl ? (
+                    <img
+                      src={event.imageUrl}
+                      alt={event.title}
+                      className="event-image"
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = "/default-event-image.jpg";
+                      }}
+                    />
+                  ) : (
+                    <div className="event-letter-placeholder">
+                      {event.title?.charAt(0).toUpperCase()}
+                    </div>
+                  )}
                 </div>
 
                 <div className="event-card-content">
                   <h3 className="event-title">{event.title}</h3>
-                  <div className="event-location">
-                    <i className="fa-solid fa-location-dot"></i>
-                    {event.location}
-                  </div>
+                  <p className="event-date-time">
+                    {new Date(event.date).toLocaleString("en-US", {
+                      month: "long",
+                      day: "numeric",
+                      year: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </p>
+                  <p className="event-location">
+                    {event.location || "Unknown location"}
+                  </p>
+                  <p className="event-price">
+                    {formatCurrency(event.price || 0)}
+                  </p>
                   <p className="event-description">
-                    {event.description.substring(0, 100)}
-                    {event.description.length > 100 ? "..." : ""}
+                    {event.description || "No description provided."}
                   </p>
 
-                  <div className="event-stats">
-                    <div className="attendees-stat">
-                      <i className="fa-solid fa-users"></i>
-                      <span>{attendeeCount} attending</span>
-                    </div>
-                    <div className="capacity-stat">
-                      <i className="fa-solid fa-chart-simple"></i>
-                      <span>{capacityPercentage}% capacity</span>
-                    </div>
-                  </div>
-
-                  <div className="event-revenue">
-                    <i className="fa-solid fa-dollar-sign"></i>
-                    <span>Revenue: {formatCurrency(revenue)}</span>
-                  </div>
-                </div>
-
-                <div className="event-card-footer">
-                  <button
-                    className="view-details-btn"
-                    onClick={() => setSelectedEvent(event)}
-                  >
-                    View Details
-                  </button>
-
-                  <div className="event-status">
-                    <span
-                      className={`status-indicator ${
-                        new Date(event.date) > new Date() ? "upcoming" : "past"
-                      }`}
-                    ></span>
-                    <span>
-                      {new Date(event.date) > new Date() ? "Upcoming" : "Past"}
-                    </span>
+                  <div className="event-button-container">
+                    <button
+                      className="event-action-button"
+                      onClick={() => setSelectedEvent(event)}
+                    >
+                      Register Now
+                    </button>
                   </div>
                 </div>
               </div>

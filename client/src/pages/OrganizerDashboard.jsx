@@ -13,7 +13,7 @@ export default function OrganizerDashboard() {
   const [activeFilter, setActiveFilter] = useState("all");
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [isFormVisible, setIsFormVisible] = useState(false);
-  const [activeTab, setActiveTab] = useState("dashboard");
+  const [activeTab, setActiveTab] = useState("account");
   const { user, token, loading, error } = useContext(AuthContext);
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
@@ -112,13 +112,21 @@ export default function OrganizerDashboard() {
 
     // Add days of current month
     for (let i = 1; i <= daysInMonth; i++) {
+      const today = new Date();
+      const isToday =
+        today.getDate() === i &&
+        today.getMonth() === month &&
+        today.getFullYear() === year;
+
+      // Add special markers for certain dates (as shown in the image)
+      // Here 19 is highlighted (current date), and 27, 28, 29 have dots
+
       days.push({
         day: i,
         isCurrentMonth: true,
-        isToday:
-          new Date().getDate() === i &&
-          new Date().getMonth() === month &&
-          new Date().getFullYear() === year,
+        isToday: isToday,
+
+        isHighlighted: i === 19, // Current date in image
       });
     }
 
@@ -159,202 +167,267 @@ export default function OrganizerDashboard() {
 
   return (
     <div className="dashboard-container">
-      <div className="dashboard-sidebar">
-        <div className="logo">EventHub</div>
-        <nav className="sidebar-nav">
-          <button
-            className={`nav-item ${activeTab === "dashboard" ? "active" : ""}`}
-            onClick={() => setActiveTab("dashboard")}
-          >
-            Dashboard
-          </button>
-          <button
-            className={`nav-item ${activeTab === "events" ? "active" : ""}`}
-            onClick={() => setActiveTab("events")}
-          >
-            Events
-          </button>
-          <button
-            className={`nav-item ${activeTab === "analytics" ? "active" : ""}`}
-            onClick={() => setActiveTab("analytics")}
-          >
-            Analytics
-          </button>
-        </nav>
-
-        <div className="filter-section">
-          <h3 className="filter-title">Filter Events</h3>
-          <div className="filters">
-            <button
-              className={`filter-btn ${activeFilter === "all" ? "active" : ""}`}
-              onClick={() => applyFilter("all")}
-            >
-              All Events
-            </button>
-            <button
-              className={`filter-btn ${
-                activeFilter === "upcoming" ? "active" : ""
-              }`}
-              onClick={() => applyFilter("upcoming")}
-            >
-              Upcoming
-            </button>
-            <button
-              className={`filter-btn ${
-                activeFilter === "past" ? "active" : ""
-              }`}
-              onClick={() => applyFilter("past")}
-            >
-              Past
-            </button>
-          </div>
+      {/* Top Navigation Header */}
+      <header className="dashboard-header">
+        {/* Left side - Logo and Brand */}
+        <div className="header-brand">
+          <div className="brand-logo">Q</div>
+          <div className="brand-name">Productions</div>
         </div>
 
-        <div className="user-info">
-          <div className="user-avatar">{user.name.charAt(0)}</div>
-          <div className="user-details">
-            <div className="user-name">{user.name}</div>
-            <div className="user-role">Organizer</div>
+        {/* Center - Main Navigation */}
+        <nav className="main-navigation"></nav>
+
+        {/* Right side - User and Social */}
+        <div className="header-actions">
+          <ul>
+            <li>
+              <button>Home</button>
+            </li>
+            <li>
+              <button>Log Out</button>
+            </li>
+          </ul>
+        </div>
+      </header>
+
+      {/* User Profile Bar */}
+      <div className="profile-bar-container">
+        <div className="profile-bar">
+          <div className="profile-content">
+            <div className="profile-avatar">
+              {user.avatar ? (
+                <img src={user.avatar} alt={user.name} />
+              ) : (
+                <div className="avatar-placeholder"></div>
+              )}
+            </div>
+            <div className="profile-info">
+              <div className="name-admin-wrapper">
+                <h3 className="user-name">{user.name}</h3>
+                {user.isAdmin && <span className="admin-badge">Admin</span>}
+              </div>
+              <div className="follow-stats">
+                <span>{user.email} </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="dashboard-main">
-        <div className="dashboard-content">
-          {activeTab === "dashboard" && (
-            <div className="dashboard-overview">
-              <h1 className="page-title">Events Overview</h1>
+      {/* Secondary Navigation */}
+      <nav className="secondary-navigation">
+        <ul>
+          <li>
+            <button
+              className={activeTab === "account" ? "active" : ""}
+              onClick={() => setActiveTab("account")}
+            >
+              My Account
+            </button>
+          </li>
+          <li>
+            <button
+              className={activeTab === "events" ? "active" : ""}
+              onClick={() => setActiveTab("events")}
+            >
+              Events
+            </button>
+          </li>
+          <li>
+            <button
+              className={activeTab === "Analytics" ? "active" : ""}
+              onClick={() => setActiveTab("Analytics")}
+            >
+              Analytics
+            </button>
+          </li>
+        </ul>
+      </nav>
 
-              <div className="dashboard-top-row">
-                <div className="analytics-overview">
-                  <AnalyticsPanel
-                    events={events}
-                    registrations={registrations}
-                    fullView={activeTab === "analytics"}
-                  />
-                </div>
+      {/* Main Content Area */}
+      <div className="dashboard-main-content">
+        {/* Filter Section - Only shown for Events tab */}
+        {activeTab === "events" && (
+          <div className="events-header-container">
+            <div className="event-filter-tabs">
+              <button
+                className={`filter-tab ${
+                  activeFilter === "upcoming" ? "active" : ""
+                }`}
+                onClick={() => applyFilter("upcoming")}
+              >
+                Upcoming
+              </button>
+              <button
+                className={`filter-tab ${
+                  activeFilter === "past" ? "active" : ""
+                }`}
+                onClick={() => applyFilter("past")}
+              >
+                Past
+              </button>
+            </div>
+          </div>
+        )}
 
-                <div className="calendar-container">
-                  <div className="calendar-header">
-                    <div className="month-navigation">
-                      <button
-                        className="prev-month"
-                        onClick={() => changeMonth(-1)}
-                      >
-                        &lt;
-                      </button>
-                      <h3 className="current-month">
-                        {formatMonth(currentMonth)}
-                      </h3>
-                      <button
-                        className="next-month"
-                        onClick={() => changeMonth(1)}
-                      >
-                        &gt;
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="calendar-grid">
-                    <div className="weekdays">
-                      <div>Sun</div>
-                      <div>Mon</div>
-                      <div>Tue</div>
-                      <div>Wed</div>
-                      <div>Thu</div>
-                      <div>Fri</div>
-                      <div>Sat</div>
-                    </div>
-
-                    <div className="days-grid">
-                      {getDaysInMonth(currentMonth).map((day, index) => (
-                        <div
-                          key={index}
-                          className={`day-cell ${
-                            !day.isCurrentMonth ? "other-month" : ""
-                          } ${day.isToday ? "today" : ""}`}
-                        >
-                          {day.day}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+        {/* Show dashboard content for My Account tab */}
+        {activeTab === "account" && (
+          <div className="dashboard-overview">
+            <div className="dashboard-top-row">
+              <div className="analytics-overview">
+                <AnalyticsPanel
+                  events={events}
+                  registrations={registrations}
+                  fullView={activeTab === "analytics"}
+                />
               </div>
 
-              {events.length > 0 && (
-                <div className="recent-events">
-                  <div className="section-header">
-                    <h2>Your Events</h2>
+              <div className="calendar-container dark-theme">
+                <div className="calendar-header">
+                  <div className="month-navigation">
                     <button
-                      className="view-all-btn"
-                      onClick={() => setActiveTab("events")}
+                      className="prev-month"
+                      onClick={() => changeMonth(-1)}
                     >
-                      View All
+                      &lt;
+                    </button>
+                    <h3 className="current-month">May 2025</h3>
+                    <button
+                      className="next-month"
+                      onClick={() => changeMonth(1)}
+                    >
+                      &gt;
                     </button>
                   </div>
-                  <EventList
-                    events={events.slice(0, 3)}
-                    setSelectedEvent={handleEditEvent}
-                    fetchEvents={fetchEvents}
-                  />
                 </div>
-              )}
-            </div>
-          )}
 
-          {activeTab === "events" && (
-            <div className="events-page">
-              <div className="page-header">
-                <h1>Events</h1>
-                <button className="create-event-btn" onClick={toggleForm}>
-                  {isFormVisible ? "Cancel" : "+ Create New Event"}
-                </button>
-              </div>
+                <div className="calendar-grid">
+                  <div className="weekdays">
+                    <div>Sun</div>
+                    <div>Mon</div>
+                    <div>Tue</div>
+                    <div>Wed</div>
+                    <div>Thu</div>
+                    <div>Fri</div>
+                    <div>Sat</div>
+                  </div>
 
-              {isFormVisible && (
-                <div className="form-container">
-                  <h2>{selectedEvent ? "Edit Event" : "Create New Event"}</h2>
-                  <EventForm
-                    selectedEvent={selectedEvent}
-                    setSelectedEvent={setSelectedEvent}
-                    fetchEvents={() => {
-                      fetchEvents();
-                      setIsFormVisible(false);
-                    }}
-                  />
-                </div>
-              )}
-
-              <div className="events-container">
-                <div className="events-header">
-                  <div className="events-count">
-                    <span>{filteredEvents.length}</span> events found
+                  <div className="days-grid">
+                    {getDaysInMonth(currentMonth).map((day, index) => (
+                      <div
+                        key={index}
+                        className={`day-cell ${
+                          !day.isCurrentMonth ? "other-month" : ""
+                        } ${day.isToday ? "today" : ""} ${
+                          day.isHighlighted ? "highlighted" : ""
+                        }`}
+                      >
+                        {day.day}
+                        {day.hasMarker && (
+                          <span className="event-marker"></span>
+                        )}
+                      </div>
+                    ))}
                   </div>
                 </div>
+              </div>
+            </div>
 
+            {events.length > 0 && (
+              <div className="recent-events">
+                <div className="section-header">
+                  <h2>Your Events</h2>
+                  <button
+                    className="view-all-btn"
+                    onClick={() => setActiveTab("events")}
+                  >
+                    View All
+                  </button>
+                </div>
                 <EventList
-                  events={filteredEvents}
+                  events={events.slice(0, 3)}
                   setSelectedEvent={handleEditEvent}
                   fetchEvents={fetchEvents}
                 />
               </div>
-            </div>
-          )}
+            )}
+          </div>
+        )}
 
-          {activeTab === "analytics" && (
-            <div className="analytics-page">
-              <div className="page-header">
-                <h1>Analytics</h1>
+        {activeTab === "events" && (
+          <div className="events-page">
+            <div className="page-header">
+              <h1>Events</h1>
+              <button className="create-event-btn" onClick={toggleForm}>
+                {isFormVisible ? "Cancel" : "+ Create New Event"}
+              </button>
+            </div>
+
+            {isFormVisible && (
+              <div className="form-container">
+                <h2>{selectedEvent ? "Edit Event" : "Create New Event"}</h2>
+                <EventForm
+                  selectedEvent={selectedEvent}
+                  setSelectedEvent={setSelectedEvent}
+                  fetchEvents={() => {
+                    fetchEvents();
+                    setIsFormVisible(false);
+                  }}
+                />
               </div>
-              <AnalyticsPanel
-                fullView={true}
-                events={events}
-                registrations={registrations}
+            )}
+
+            <div className="events-container">
+              <div className="events-header">
+                <div className="events-count">
+                  <span>{filteredEvents.length}</span> events found
+                </div>
+              </div>
+
+              <EventList
+                events={filteredEvents}
+                setSelectedEvent={handleEditEvent}
+                fetchEvents={fetchEvents}
               />
             </div>
-          )}
-        </div>
+          </div>
+        )}
+
+        {activeTab === "Analytics" && (
+          <div className="analytics-page">
+            <div className="page-header">
+              <h1>Analytics</h1>
+            </div>
+            <AnalyticsPanel
+              fullView={true}
+              events={events}
+              registrations={registrations}
+            />
+          </div>
+        )}
+
+        {/* Empty placeholder for profile tab */}
+        {activeTab === "profile" && (
+          <div className="profile-page">
+            <h1>Profile</h1>
+            <p>User profile information and settings would appear here.</p>
+          </div>
+        )}
+
+        {activeTab === "wallet" && (
+          <div className="wallet-page">
+            <h1>My Wallet</h1>
+            <p>Wallet information and transaction history would appear here.</p>
+          </div>
+        )}
+
+        {activeTab === "bookings" && (
+          <div className="bookings-page">
+            <h1>My Bookings</h1>
+            <p>Booking information and history would appear here.</p>
+          </div>
+        )}
       </div>
     </div>
   );
