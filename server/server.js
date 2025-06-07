@@ -1,36 +1,26 @@
-import express from "express"; // Convert to ES module import
-import mongoose from "mongoose"; // Convert to ES module import
-import cors from "cors"; // Convert to ES module import
-import dotenv from "dotenv"; // Convert to ES module import
-import eventRoutes from "./routes/events.js"; // ES module import
-import authRoutes from "./routes/authRoutes.js"; // Correct import for authRoutes
-
-import analyticsRoutes from "./routes/analyticsRoutes.js";
-import registrationRoutes from "./routes/registrations.js";
+import express from "express";
+import dotenv from "dotenv";
+import cors from "cors";
+import connectDB from "./config/db.js";
+import authRoutes from "./routes/authRoutes.js";
+import eventRoutes from "./routes/eventRoutes.js";
+import guestRoutes from "./routes/guestRoutes.js";
+import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 
 dotenv.config();
+connectDB();
 
 const app = express();
+
 app.use(cors());
 app.use(express.json());
+
 app.use("/api/auth", authRoutes);
 app.use("/api/events", eventRoutes);
-app.use("/api/analytics", analyticsRoutes);
-app.use("/api/registrations", registrationRoutes);
+app.use("/api/guests", guestRoutes);
 
-// Example route
-app.get("/", (req, res) => res.send("API running"));
+app.use(notFound);
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
-
-console.log("Connecting to Mongo URI:", process.env.MONGO_URI);
-
-mongoose
-  .connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() =>
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
-  )
-  .catch((err) => console.log(err));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
